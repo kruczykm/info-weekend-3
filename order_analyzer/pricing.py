@@ -1,8 +1,18 @@
-from pricing import calculate_total_revenue
+from validators import is_valid_order
 
-def print_revenue_report(total_revenue: float):
-    print("Retail revenue report")
-    print(f"Total revenue: {total_revenue:.2f}.") # zaograglamy do dwoch miejsc po przecinku
+def calculate_line_total(quantity: int, unit_price: float) -> float:
+    return quantity * unit_price
+
+def calculate_total_revenue(orders: list) -> float:
+    total_revenue = 0.0
+
+    for order in orders:
+        if is_valid_order(order):
+            quantity = int(order["quantity"])
+            price = float(order["unit_price"])
+            total_revenue += calculate_line_total(quantity, price)
+
+    return total_revenue
 
 # orders_raw = [
 #     {"invoice_no": "536365", "stock_code": "85123A", "description": "WHITE HANGING HEART T-LIGHT HOLDER", "quantity": "6", "unit_price": "2.55", "customer_id": "17850", "country": "United Kingdom"},
@@ -12,4 +22,12 @@ def print_revenue_report(total_revenue: float):
 #     {"invoice_no": "536369", "stock_code": "22752", "description": "SET 7 BABUSHKA NESTING BOXES", "quantity": "2", "unit_price": "7.65", "customer_id": "13047", "country": "United Kingdom"}
 # ]
 
-# print_revenue_report(calculate_total_revenue(orders_raw))
+# Sprawdzenie zmiennej wbudowanej __name__ w module validators.py
+# Wyswietli sie __main__ tylko wtedy, gdy uruchomimy ten plik bezposrednio, a nie jako import w innym module
+# Gdy uruchomimy ten modul jako import w innym module, wyswietli sie nazwa tego modulu, czyli pricing
+# print("print z pricing.py: ", __name__)
+
+# if __name__ == "__main__":
+#     line_total = calculate_line_total(3, 10.0)
+#     print(line_total)
+    # print(calculate_total_revenue(orders_raw))
